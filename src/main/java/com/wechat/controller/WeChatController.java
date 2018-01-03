@@ -35,7 +35,7 @@ public class WeChatController {
 	 * @param nonce 微信端发来的随机字符串
 	 * @param echostr 微信端发来的验证字符串
 	 */
-	@GetMapping(value = "wechat.do")
+	@GetMapping(value = "wechat")
 	public void validate(PrintWriter   print,
 			@RequestParam(value = "signature") String signature,
 			@RequestParam(value = "timestamp") String timestamp,
@@ -59,14 +59,14 @@ public class WeChatController {
 	 * @throws JAXBException
 	 */
 
-	@PostMapping(value = "wechat.do")
+	@PostMapping(value = "wechat")
 	public void processMsg(HttpServletRequest request, HttpServletResponse response)
 			throws JAXBException {
 		try(PrintWriter out = response.getWriter();) {
 			response.setContentType("text/xml;charset=utf-8");
 
 			
-			String requestContent = ConvertToString(request.getInputStream());
+			String requestContent = convertToString(request.getInputStream());
 			//判断消息类型，以处理不同类型的消息
 			String msgType = MsgService.checkMsgType(requestContent);
 			System.out.println("msgType:" + msgType + "\n");
@@ -104,7 +104,7 @@ public class WeChatController {
 	}
 	
 	//处理响应回来的内容
-	public String ConvertToString(InputStream is) throws IOException {
+	public String convertToString(InputStream is) throws IOException {
 		BufferedReader reader = new BufferedReader(new InputStreamReader(is,
 				"utf-8"));
 		StringBuilder strBuilder = new StringBuilder();
@@ -115,7 +115,7 @@ public class WeChatController {
 		return strBuilder.toString();
 	}
 
-	@RequestMapping(value = "gettoken.do")
+	@RequestMapping(value = "gettoken")
 	public void getToken() {
 		
 	}
