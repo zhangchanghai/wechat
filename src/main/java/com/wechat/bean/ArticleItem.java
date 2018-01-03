@@ -1,19 +1,14 @@
-package com.wechat.entity.msg;
-
-
-
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-
-@XmlRootElement(name="xml")
-public class LinkMsg extends Msg {
-	@XmlElement
+package com.wechat.bean;
+/**
+ * 图文消息
+ * @author Changhai
+ *
+ */
+public class ArticleItem {
 	private String Title;
-	@XmlElement
 	private String Description;
-	@XmlElement
+	private String PicUrl;
 	private String Url;
-	
 	public String getTitle() {
 		return Title;
 	}
@@ -25,6 +20,12 @@ public class LinkMsg extends Msg {
 	}
 	public void setDescription(String description) {
 		Description = description;
+	}
+	public String getPicUrl() {
+		return PicUrl;
+	}
+	public void setPicUrl(String picUrl) {
+		PicUrl = picUrl;
 	}
 	public String getUrl() {
 		return Url;

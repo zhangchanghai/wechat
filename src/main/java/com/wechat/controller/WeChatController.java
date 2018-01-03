@@ -2,10 +2,7 @@ package com.wechat.controller;
 
 
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.PrintWriter;
 
 import javax.servlet.http.HttpServletRequest;
@@ -18,13 +15,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.wechat.entity.msg.LocationMsg;
-import com.wechat.entity.msg.PicMsg;
-import com.wechat.entity.msg.TextMsg;
-import com.wechat.service.EventService;
-import com.wechat.service.MsgService;
-import com.wechat.util.CheckoutUtil;
-import com.wechat.util.XmlUtil;
+import com.wechat.service.CoreService;
+import com.wechat.util.WeChatUtil;
 
 @Controller
 public class WeChatController {
@@ -42,7 +34,7 @@ public class WeChatController {
 			@RequestParam(value = "nonce") String nonce,
 			@RequestParam(value = "echostr") String echostr) {
 		try {
-			if (CheckoutUtil.checkSignature(signature, timestamp, nonce)) {
+			if (WeChatUtil.checkSignature(signature, timestamp, nonce)) {
 				print.write(echostr);
 				print.flush();
 				print.close();
@@ -62,59 +54,23 @@ public class WeChatController {
 	@PostMapping(value = "wechat")
 	public void processMsg(HttpServletRequest request, HttpServletResponse response)
 			throws JAXBException {
-		try(PrintWriter out = response.getWriter();) {
-			response.setContentType("text/xml;charset=utf-8");
-
-			
-			String requestContent = convertToString(request.getInputStream());
-			//判断消息类型，以处理不同类型的消息
-			String msgType = MsgService.checkMsgType(requestContent);
-			System.out.println("msgType:" + msgType + "\n");
-			String xml = "";
-			if (msgType.equals("text")) {
-				TextMsg msg = (TextMsg) XmlUtil.xmlToObject(requestContent,
-						TextMsg.class);
-				System.out.println(msg.getContent());
-				xml = MsgService.processTextMsg(msg);
-
-				System.out.println(xml + "\n");
-
-			} else if (msgType.equals("image")) {
-				PicMsg msg = (PicMsg) XmlUtil.xmlToObject(requestContent,
-						PicMsg.class);
-				xml = MsgService.processImageMsg(msg);
-				System.out.println(xml + "\n");
-
-			} else if (msgType.equals("location")) {
-				LocationMsg msg = (LocationMsg) XmlUtil.xmlToObject(
-						requestContent, LocationMsg.class);
-			} else if (msgType.equals("event")) {
-				xml = EventService.distributeEvent(requestContent);
-				System.out.println(xml + "\n");
-
-			}
-			if (xml != "") {
-				out.write(xml);
-			}
-
+		response.setCharacterEncoding("utf-8");
+        
+		try (PrintWriter print = response.getWriter();){			
+			 // 接收消息并返回消息
+	        // 调用核心服务类接收处理请求
+	        String respXml = CoreService.processRequest(request);
+	        System.out.println(respXml);
+	        print.print(respXml);
+	        print.flush();
+	        print.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
+       
 	}
 	
-	//处理响应回来的内容
-	public String convertToString(InputStream is) throws IOException {
-		BufferedReader reader = new BufferedReader(new InputStreamReader(is,
-				"utf-8"));
-		StringBuilder strBuilder = new StringBuilder();
-		String strRead = "";
-		while ((strRead = reader.readLine()) != null) {
-			strBuilder.append(strRead);
-		}
-		return strBuilder.toString();
-	}
-
+	
 	@RequestMapping(value = "gettoken")
 	public void getToken() {
 		
