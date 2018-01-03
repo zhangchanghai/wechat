@@ -2,15 +2,19 @@ package com.wechat.controller;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import com.wechat.service.CoreService;
+
+import com.wechat.service.WeChatService;
 import com.wechat.util.WeChatUtil;
 
 @RestController
 public class WeChatController {
+	@Autowired
+	private WeChatService weChatService;
 	/**
 	 * 处理微信服务器发来的get请求，进行签名的验证
 	 * 
@@ -33,6 +37,6 @@ public class WeChatController {
 	@PostMapping(value = "wechat")
 	public String processMsg(HttpServletRequest request) {
 		// 调用核心服务类接收处理请求
-		return CoreService.processRequest(request);		
+		return weChatService.processRequest(request);		
 	}
 }

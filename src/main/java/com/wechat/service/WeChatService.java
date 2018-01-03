@@ -7,6 +7,8 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.stereotype.Service;
+
 import com.wechat.bean.ArticleItem;
 import com.wechat.util.WeChatContant;
 import com.wechat.util.WeChatUtil;
@@ -14,12 +16,13 @@ import com.wechat.util.WeChatUtil;
 /**
  * 核心服务类
  */
-public class CoreService {
-    public static String processRequest(HttpServletRequest request) {
+@Service
+public class WeChatService {
+    public String processRequest(HttpServletRequest request) {
         // xml格式的消息数据
         String respXml = null;
         // 默认返回的文本消息内容
-        String respContent = "未知的消息类型";
+        String respContent;
         try {
             // 调用parseXml方法解析请求消息
             Map<String,String> requestMap = WeChatUtil.parseXml(request);
