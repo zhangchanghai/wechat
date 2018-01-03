@@ -13,8 +13,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.xml.bind.JAXBException;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.wechat.entity.msg.LocationMsg;
@@ -25,13 +26,6 @@ import com.wechat.service.MsgService;
 import com.wechat.util.CheckoutUtil;
 import com.wechat.util.XmlUtil;
 
-/**
- * 
- * @author sky
- * 
- * 此controller主要是与微信服务器通信，接管公众平台发来的所有消息
- *
- */
 @Controller
 public class WeChatController {
 	/**
@@ -41,7 +35,7 @@ public class WeChatController {
 	 * @param nonce 微信端发来的随机字符串
 	 * @param echostr 微信端发来的验证字符串
 	 */
-	@RequestMapping(value = "wechat.do", method = RequestMethod.GET)
+	@GetMapping(value = "wechat.do")
 	public void validate(HttpServletRequest req, HttpServletResponse response,
 			@RequestParam(value = "signature") String signature,
 			@RequestParam(value = "timestamp") String timestamp,
@@ -66,7 +60,7 @@ public class WeChatController {
 	 * @throws JAXBException
 	 */
 
-	@RequestMapping(value = "wechat.do", method = RequestMethod.POST)
+	@PostMapping(value = "wechat.do")
 	public void processMsg(HttpServletRequest req, HttpServletResponse resp)
 			throws JAXBException {
 		try {
