@@ -36,21 +36,20 @@ public class WeChatController {
 	 * @param echostr 微信端发来的验证字符串
 	 */
 	@GetMapping(value = "wechat.do")
-	public void validate(HttpServletRequest req, HttpServletResponse response,
+	public void validate(PrintWriter   print,
 			@RequestParam(value = "signature") String signature,
 			@RequestParam(value = "timestamp") String timestamp,
 			@RequestParam(value = "nonce") String nonce,
 			@RequestParam(value = "echostr") String echostr) {
-		if (CheckoutUtil.checkSignature(signature, timestamp, nonce)) {
-            try {
-            	PrintWriter   print = response.getWriter();
-                print.write(echostr);
-                print.flush();
-                print.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
+		try {
+			if (CheckoutUtil.checkSignature(signature, timestamp, nonce)) {
+				print.write(echostr);
+				print.flush();
+				print.close();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	/**
@@ -61,13 +60,13 @@ public class WeChatController {
 	 */
 
 	@PostMapping(value = "wechat.do")
-	public void processMsg(HttpServletRequest req, HttpServletResponse resp)
+	public void processMsg(HttpServletRequest request, HttpServletResponse response)
 			throws JAXBException {
-		try {
-			resp.setContentType("text/xml;charset=utf-8");
+		try(PrintWriter out = response.getWriter();) {
+			response.setContentType("text/xml;charset=utf-8");
 
-			PrintWriter out = resp.getWriter();
-			String requestContent = ConvertToString(req.getInputStream());
+			
+			String requestContent = ConvertToString(request.getInputStream());
 			//判断消息类型，以处理不同类型的消息
 			String msgType = MsgService.checkMsgType(requestContent);
 			System.out.println("msgType:" + msgType + "\n");
@@ -99,7 +98,6 @@ public class WeChatController {
 			}
 
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
