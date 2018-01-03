@@ -110,7 +110,7 @@ public class CoreService {
                     // TODO 处理菜单点击事件
                 }
             }
-           
+            System.out.println(respXml);
             return respXml;
         } catch (Exception e) {
             e.printStackTrace();

@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 
-@FeignClient(url="https://api.weixin.qq.com")
+@FeignClient(url="https://api.weixin.qq.com",value="xxx")
 public interface FeignUtil {
 	/**
 	 * 获取token
