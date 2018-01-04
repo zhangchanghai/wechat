@@ -28,14 +28,14 @@ $(function(){
 			$("#text-" + b).text($("#text-" + b).text().replace(/小红/g,m));
 		}
 		if(love){
-			$("title").text(y + "❤" + m + love);
+			
 		}
 		if(bgmMusic){
 			$("#bgmMusic").attr("src",bgmMusic);
 			$("#text-music").text(bgmMusic);
 		}
 	}
-	$("title").text($("title").text() + " | 永远幸福 (codejie.net)");
+	
 });
 
 function getUrl(){
@@ -70,14 +70,14 @@ Flowtime.showProgress(!0), Flowtime.addEventListener("flowtimenavigation", onNav
 					$("#text-" + b).text($("#text-" + b).text().replace(/小红/g,m));
 				}
 				if(love){
-					$("title").text(y + "❤" + m + love);
+					
 				}
 				if(bgmMusic){
 					$("#bgmMusic").attr("src",bgmMusic);
 					$("#text-music").text(bgmMusic);
 				}
 			}
-			$("title").text($("title").text() + " | 永远幸福 (codejie.net)");
+			
 		
 			bd_share();
 		

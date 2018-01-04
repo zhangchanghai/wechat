@@ -4,4 +4,5 @@ spring:
   application:
     name: wechat
   thymeleaf:
-    mode:  LEGACYHTML5
+    mode: LEGACYHTML5
+    cache: false
