@@ -32,9 +32,7 @@ public class WeChatServiceImpl implements WeChatService{
             String mes=requestMap.get(WeChatContant.Content).toString();
             // 文本消息
             if (msgType.equals(WeChatContant.REQ_MESSAGE_TYPE_TEXT)) {
-                if("1".equals(mes)){
-                	respXml = WeChatUtil.sendTextMsg(requestMap, "发送的是1");
-                }else if("2".equals(mes)||"照片".equals(mes)||"照片墙".equals(mes)){
+                if(mes!=null&&mes.length()<2){
                 	List<ArticleItem> items = new ArrayList<>();
                 	ArticleItem item = new ArticleItem();
                 	item.setTitle("照片墙");
@@ -48,6 +46,13 @@ public class WeChatServiceImpl implements WeChatService{
                 	item.setDescription("一张照片");
                 	item.setPicUrl("http://changhaiwx.pagekite.me/images/me.jpg");
                 	item.setUrl("http://changhaiwx.pagekite.me/page/index");
+                	items.add(item);
+                	
+                	item = new ArticleItem();
+                	item.setTitle("小游戏2048");
+                	item.setDescription("小游戏2048");
+                	item.setPicUrl("http://changhaiwx.pagekite.me/images/2048.jpg");
+                	item.setUrl("http://changhaiwx.pagekite.me/page/game2048");
                 	items.add(item);
                 	
                 	item = new ArticleItem();
