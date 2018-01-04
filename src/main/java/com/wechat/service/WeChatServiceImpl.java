@@ -7,9 +7,12 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.wechat.bean.ArticleItem;
+import com.wechat.util.FeignUtil;
+import com.wechat.util.RedisUtils;
 import com.wechat.util.WeChatContant;
 import com.wechat.util.WeChatUtil;
 
@@ -18,6 +21,10 @@ import com.wechat.util.WeChatUtil;
  */
 @Service
 public class WeChatServiceImpl implements WeChatService{
+	@Autowired
+	private FeignUtil feignUtil;
+	@Autowired
+	private RedisUtils redisUtils;
     public String processRequest(HttpServletRequest request) {
         // xml格式的消息数据
         String respXml = null;
@@ -59,6 +66,23 @@ public class WeChatServiceImpl implements WeChatService{
                 	item.setTitle("百度");
                 	item.setDescription("百度一下");
                 	item.setPicUrl("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1505100912368&di=69c2ba796aa2afd9a4608e213bf695fb&imgtype=0&src=http%3A%2F%2Ftx.haiqq.com%2Fuploads%2Fallimg%2F170510%2F0634355517-9.jpg");
+                	item.setUrl("http://www.baidu.com");
+                	items.add(item);
+                	
+                	respXml = WeChatUtil.sendArticleMsg(requestMap, items);
+                }else if("我的信息".equals(mes)){
+                	Map<String, String> userInfo = getUserInfo(requestMap.get(WeChatContant.FromUserName));
+                	System.out.println(userInfo.toString());
+                	String nickname = userInfo.get("nickname");
+                	String city = userInfo.get("city");
+                	String province = userInfo.get("province");
+                	String country = userInfo.get("country");
+                	String headimgurl = userInfo.get("headimgurl");
+                	List<ArticleItem> items = new ArrayList<>();
+                	ArticleItem item = new ArticleItem();
+                	item.setTitle("你的信息");
+                	item.setDescription("昵称:"+nickname+"  地址:"+country+" "+province+" "+city);
+                	item.setPicUrl(headimgurl);
                 	item.setUrl("http://www.baidu.com");
                 	items.add(item);
                 	
@@ -126,5 +150,27 @@ public class WeChatServiceImpl implements WeChatService{
         return "";
         
     }
+
+	@Override
+	public String getToken() {
+		String token = (String) redisUtils.get("token");
+		if(token == null){
+			token = "5_cSm0PI5N9rDU1wcCXe054KzHME6cwi2-IggwI7UUh9F0AfgyCWLeXw5IGyA9L98dt3xfgh4zSb6j4xMArXZu5C_2VOV6hsR84ptS5uiRCmNI8RsRxL2gkEF_4Hw6Gf1DZjC0ASHGwZx7mhm6RVAdACABFK";
+		//	Map<String, String> tokenMap = feignUtil.getToken(WeChatContant.appID, WeChatContant.appsecret);
+		//	System.out.println("token:\t"+tokenMap.toString());
+		//	token = tokenMap.get("access_token") ;
+			if(token != null){
+				redisUtils.set("token", token, 7000L);
+			}
+				
+		}
+		return token;
+	}
+
+	@Override
+	public Map<String, String> getUserInfo(String openid) {
+		// TODO Auto-generated method stub
+		return feignUtil.getUserInfo(getToken(), openid);
+	}
    
 }
