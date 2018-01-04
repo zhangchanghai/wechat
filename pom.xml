@@ -42,7 +42,17 @@
 			<artifactId>spring-cloud-starter-feign</artifactId>
 			<version>1.4.0.RELEASE</version>
 		</dependency>
-
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-thymeleaf</artifactId>
+		</dependency>
+		<!-- 使thymeleaf支持h5标签 -->
+		<dependency>
+			<groupId>net.sourceforge.nekohtml</groupId>
+			<artifactId>nekohtml</artifactId>
+			<version>1.9.22</version>
+		</dependency>
+		
 	</dependencies>
 	<build>
 		<plugins>

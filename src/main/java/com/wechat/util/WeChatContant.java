@@ -5,7 +5,8 @@ public class WeChatContant {
     public static final String appID = "微信公众平台的appid";
     //appsecret
     public static final String appsecret = "微信公众平台的apsecred";
-
+    // Token
+    public static final String TOKEN = "zch";
     public static final String RESP_MESSAGE_TYPE_TEXT = "text";
     public static final Object REQ_MESSAGE_TYPE_TEXT = "text";
     public static final Object REQ_MESSAGE_TYPE_IMAGE = "image";

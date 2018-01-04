@@ -3,4 +3,5 @@ server:
 spring:
   application:
     name: wechat
-
+  thymeleaf:
+    mode:  LEGACYHTML5

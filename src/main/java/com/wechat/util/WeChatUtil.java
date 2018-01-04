@@ -25,10 +25,7 @@ import com.wechat.bean.ArticleItem;
  * @author 32950745
  *
  */
-public class WeChatUtil {
-
-	// 与接口配置信息中的Token要一致
-	private static String token = "zch";
+public class WeChatUtil {	
 
 	/**
 	 * 验证签名
@@ -39,7 +36,7 @@ public class WeChatUtil {
 	 * @return
 	 */
 	public static boolean checkSignature(String signature, String timestamp, String nonce) {
-		String[] arr = new String[] { token, timestamp, nonce };
+		String[] arr = new String[] { WeChatContant.TOKEN, timestamp, nonce };
 		// 将token、timestamp、nonce三个参数进行字典序排序
 		// Arrays.sort(arr);
 		sort(arr);
@@ -94,7 +91,7 @@ public class WeChatUtil {
 		return s;
 	}
 
-	public static void sort(String a[]) {
+	private static void sort(String a[]) {
 		for (int i = 0; i < a.length - 1; i++) {
 			for (int j = i + 1; j < a.length; j++) {
 				if (a[j].compareTo(a[i]) < 0) {
