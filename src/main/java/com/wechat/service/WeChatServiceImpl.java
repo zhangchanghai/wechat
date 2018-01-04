@@ -155,10 +155,9 @@ public class WeChatServiceImpl implements WeChatService{
 	public String getToken() {
 		String token = (String) redisUtils.get("token");
 		if(token == null){
-			token = "5_cSm0PI5N9rDU1wcCXe054KzHME6cwi2-IggwI7UUh9F0AfgyCWLeXw5IGyA9L98dt3xfgh4zSb6j4xMArXZu5C_2VOV6hsR84ptS5uiRCmNI8RsRxL2gkEF_4Hw6Gf1DZjC0ASHGwZx7mhm6RVAdACABFK";
-		//	Map<String, String> tokenMap = feignUtil.getToken(WeChatContant.appID, WeChatContant.appsecret);
-		//	System.out.println("token:\t"+tokenMap.toString());
-		//	token = tokenMap.get("access_token") ;
+			Map<String, String> tokenMap = feignUtil.getToken(WeChatContant.appID, WeChatContant.appsecret);
+			System.out.println("token:\t"+tokenMap.toString());
+			token = tokenMap.get("access_token") ;
 			if(token != null){
 				redisUtils.set("token", token, 7000L);
 			}

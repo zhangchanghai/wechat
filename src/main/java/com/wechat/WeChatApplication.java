@@ -9,7 +9,7 @@ import com.wechat.util.FeignUtil;
 
 @SpringBootApplication
 @EnableFeignClients(clients = {FeignUtil.class})
-@EnableCaching//开启注解  
+@EnableCaching
 public class WeChatApplication {
 
 	public static void main(String[] args) {

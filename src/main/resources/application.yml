@@ -5,13 +5,4 @@ spring:
     name: wechat
   thymeleaf:
     mode: LEGACYHTML5
-    cache: false
-  redis:
-    host: 127.0.0.1
-    port: 6379
-    database: 0
-    pool:
-      max-idle: 8
-      min-idle: 0
-      max-active: 8
-      max-wait: -1
+#    cache: false
