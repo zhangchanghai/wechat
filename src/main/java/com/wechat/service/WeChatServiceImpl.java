@@ -44,22 +44,22 @@ public class WeChatServiceImpl implements WeChatService{
                 	ArticleItem item = new ArticleItem();
                 	item.setTitle("照片墙");
                 	item.setDescription("阿狸照片墙");
-                	item.setPicUrl("http://changhaiwx.pagekite.me/photo-wall/a/iali11.jpg");
-                	item.setUrl("http://changhaiwx.pagekite.me/page/photowall");
+                	item.setPicUrl("http://changhaiww.pagekite.me/photo-wall/a/iali11.jpg");
+                	item.setUrl("http://changhaiww.pagekite.me/page/photowall");
                 	items.add(item);
                 	
                 	item = new ArticleItem();
                 	item.setTitle("哈哈");
                 	item.setDescription("一张照片");
-                	item.setPicUrl("http://changhaiwx.pagekite.me/images/me.jpg");
-                	item.setUrl("http://changhaiwx.pagekite.me/page/index");
+                	item.setPicUrl("http://changhaiww.pagekite.me/images/me.jpg");
+                	item.setUrl("http://changhaiww.pagekite.me/page/index");
                 	items.add(item);
                 	
                 	item = new ArticleItem();
                 	item.setTitle("小游戏2048");
                 	item.setDescription("小游戏2048");
-                	item.setPicUrl("http://changhaiwx.pagekite.me/images/2048.jpg");
-                	item.setUrl("http://changhaiwx.pagekite.me/page/game2048");
+                	item.setPicUrl("http://changhaiww.pagekite.me/images/2048.jpg");
+                	item.setUrl("http://changhaiww.pagekite.me/page/game2048");
                 	items.add(item);
                 	
                 	item = new ArticleItem();
@@ -155,7 +155,7 @@ public class WeChatServiceImpl implements WeChatService{
 	public String getToken() {
 		String token = (String) redisUtils.get("token");
 		if(token == null){
-			Map<String, String> tokenMap = feignUtil.getToken(WeChatContant.appID, WeChatContant.appsecret);
+			Map<String, String> tokenMap = feignUtil.getToken((String)redisUtils.get(WeChatContant.appID), (String)redisUtils.get(WeChatContant.appsecret));
 			System.out.println("token:\t"+tokenMap.toString());
 			token = tokenMap.get("access_token") ;
 			if(token != null){
