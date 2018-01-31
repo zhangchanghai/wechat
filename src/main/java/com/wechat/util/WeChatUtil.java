@@ -175,6 +175,12 @@ public class WeChatUtil {
 
 		}
 	}
+	/**
+	 * 回复文本消息
+	 * @param requestMap
+	 * @param content
+	 * @return
+	 */
 	 public static String sendTextMsg(Map<String,String> requestMap,String content){
     	
     	Map<String,Object> map=new HashMap<String, Object>();
@@ -185,6 +191,12 @@ public class WeChatUtil {
         map.put("Content", content);
         return  mapToXML(map);
     }
+	 /**
+	  * 回复图文消息
+	  * @param requestMap
+	  * @param items
+	  * @return
+	  */
 	public static String sendArticleMsg(Map<String,String> requestMap,List<ArticleItem> items){
 		if(items == null || items.size()<1){
 			return "";

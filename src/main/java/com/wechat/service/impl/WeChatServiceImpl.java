@@ -1,4 +1,4 @@
-package com.wechat.service;
+package com.wechat.service.impl;
 
 
 import java.util.ArrayList;
@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.wechat.bean.ArticleItem;
+import com.wechat.service.WeChatService;
 import com.wechat.util.FeignUtil;
 import com.wechat.util.RedisUtils;
 import com.wechat.util.WeChatContant;
@@ -35,31 +36,38 @@ public class WeChatServiceImpl implements WeChatService{
             Map<String,String> requestMap = WeChatUtil.parseXml(request);
              // 消息类型
             String msgType = (String) requestMap.get(WeChatContant.MsgType);
-
-            String mes=requestMap.get(WeChatContant.Content).toString();
+            String mes = null;
             // 文本消息
             if (msgType.equals(WeChatContant.REQ_MESSAGE_TYPE_TEXT)) {
+            	mes =requestMap.get(WeChatContant.Content).toString();
                 if(mes!=null&&mes.length()<2){
                 	List<ArticleItem> items = new ArrayList<>();
                 	ArticleItem item = new ArticleItem();
                 	item.setTitle("照片墙");
                 	item.setDescription("阿狸照片墙");
-                	item.setPicUrl("http://changhaiww.pagekite.me/photo-wall/a/iali11.jpg");
-                	item.setUrl("http://changhaiww.pagekite.me/page/photowall");
+                	item.setPicUrl("http://changhaiwx.pagekite.me/photo-wall/a/iali11.jpg");
+                	item.setUrl("http://changhaiwx.pagekite.me/page/photowall");
                 	items.add(item);
                 	
                 	item = new ArticleItem();
                 	item.setTitle("哈哈");
                 	item.setDescription("一张照片");
-                	item.setPicUrl("http://changhaiww.pagekite.me/images/me.jpg");
-                	item.setUrl("http://changhaiww.pagekite.me/page/index");
+                	item.setPicUrl("http://changhaiwx.pagekite.me/images/me.jpg");
+                	item.setUrl("http://changhaiwx.pagekite.me/page/index");
                 	items.add(item);
                 	
                 	item = new ArticleItem();
                 	item.setTitle("小游戏2048");
                 	item.setDescription("小游戏2048");
-                	item.setPicUrl("http://changhaiww.pagekite.me/images/2048.jpg");
-                	item.setUrl("http://changhaiww.pagekite.me/page/game2048");
+                	item.setPicUrl("http://changhaiwx.pagekite.me/images/2048.jpg");
+                	item.setUrl("http://changhaiwx.pagekite.me/page/game2048");
+                	items.add(item);
+                	
+                	item = new ArticleItem();
+                	item.setTitle("小游戏摇一摇");
+                	item.setDescription("小游戏摇一摇");
+                	item.setPicUrl("http://changhaiwx.pagekite.me/images/2048.jpg");
+                	item.setUrl("http://changhaiwx.pagekite.me/page/yyy2");
                 	items.add(item);
                 	
                 	item = new ArticleItem();
@@ -140,6 +148,7 @@ public class WeChatServiceImpl implements WeChatService{
                     // TODO 处理菜单点击事件
                 }
             }
+            mes = mes == null ? "不知道你在干嘛" : mes;
             if(respXml == null)
             	respXml = WeChatUtil.sendTextMsg(requestMap, mes);
             System.out.println(respXml);
