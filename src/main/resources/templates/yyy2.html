@@ -5,13 +5,23 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>摇一摇</title>
-
-
+<style type="text/css">
+        body{margin:0;padding: 0;}
+        .main{width:100%;margin:0 auto;}
+        .pro{width:90%;margin:10px 5%;height: 20px;background: #ccc;border-radius: 10px;overflow: hidden;}
+        .pro_bg{background: red;height: 20px;width:0;}
+        </style>
 </head>
 <body>
 <div id="app">
 <template v-for="(n,index) in no">
-	 玩家{{index+1}}:<span>{{n}}</span><br/>
+<H2> 玩家{{index+1}}</H2>
+
+{{n}}
+<div class="pro">
+    <div class="pro_bg" :style="'width: '+n"></div>
+</div>
+<br/><hr/>
 </template>
 </div>
 <script th:src="@{/js/vue.min.js}"></script>
@@ -78,8 +88,11 @@ var app = new Vue({
     //接收到消息的回调方法
     websocket.onmessage = function(event){
     	var mes =event.data;
-    	app.no=mes.split(",");
-    	
+    	if(mes.startWith("e")){
+    		alert(mes.substring(1));
+    	}else{
+    		app.no=mes.split(",");
+    	}
     }
 
     //连接关闭的回调方法
@@ -107,6 +120,7 @@ var app = new Vue({
     	  return reg.test(this);        
     	}  
 </script>
+         
 </body>
 
 </html>

@@ -55,7 +55,7 @@ public class MyWebSocket {
 	//		sendInfo2(this.getName()+"离开聊天");
 	        webSocketSet.remove(this);  //从set中删除
 	        subOnlineCount();           //在线数减1
-	        System.out.println("有一连接关闭！当前在线人数为" + getOnlineCount());
+//	        System.out.println("有一连接关闭！当前在线人数为" + getOnlineCount());
 	    //    sendInfo("NO" + getOnlineCount());
     	 } catch (Exception e) {
     		 // TODO Auto-generated catch block
@@ -69,7 +69,7 @@ public class MyWebSocket {
      * @param message 客户端发送过来的消息*/
     @OnMessage
     public void onMessage(String message, Session session) {
-        System.out.println("来自客户端的消息:" + message);
+    //    System.out.println("来自客户端的消息:" + message);
 
         //群发消息
        try {
@@ -95,7 +95,22 @@ public class MyWebSocket {
         this.session.getBasicRemote().sendText(message);
         //this.session.getAsyncRemote().sendText(message);
     }
-
+    public synchronized void end() throws Exception {
+    	MyWebSocket ws = this;
+    	for(int i=0;i<webSocketSet.size();i++){
+    		MyWebSocket item = webSocketSet.get(i);
+    		try {
+            	if(item.equals(ws) ){
+            		item.sendMessage("e你赢了!");
+            	}else{
+            		item.sendMessage("e很遗憾!");
+            	}
+            } catch (Exception e) {
+                continue;
+            }
+    		no[i]=0;
+    	}
+    }
 
     /**
      * 群发自定义消息
@@ -103,7 +118,7 @@ public class MyWebSocket {
     public static void sendInfo() throws Exception {
     	String message ="";
     	for(int i:no)
-    		message += i+",";
+    		message += i+"%,";
     	message = message.substring(0,message.length()-1);
     	for (MyWebSocket item : webSocketSet) {
             try {
@@ -121,6 +136,10 @@ public class MyWebSocket {
     		try {
             	if(item.equals(ws) ){
             		no[i]=no[i]+1;
+            		if(no[i]==100){
+            			end();
+            			return ;
+            		}
             	}
             } catch (Exception e) {
                 continue;
