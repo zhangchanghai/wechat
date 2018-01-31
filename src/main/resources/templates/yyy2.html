@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>摇一摇</title>
+
+
+</head>
+<body>
+<div id="app">
+<template v-for="(n,index) in no">
+	 玩家{{index+1}}:<span>{{n}}</span><br/>
+</template>
+</div>
+<script th:src="@{/js/vue.min.js}"></script>
+<script type="text/javascript">
+
+var SHAKE_THRESHOLD = 800;
+var last_update = 0;
+var x = y = z = last_x = last_y = last_z = 0;
+
+if (window.DeviceMotionEvent) {
+window.addEventListener('devicemotion', deviceMotionHandler, false);
+} else {
+alert('本设备不支持devicemotion事件');
+}
+
+function deviceMotionHandler(eventData) {
+var acceleration = eventData.accelerationIncludingGravity;
+var curTime = new Date().getTime();
+
+if ((curTime - last_update) > 100) {
+var diffTime = curTime - last_update;
+last_update = curTime;
+x = acceleration.x;
+y = acceleration.y;
+z = acceleration.z;
+var speed = Math.abs(x + y + z - last_x - last_y - last_z) / diffTime * 10000;
+//var status = document.getElementById("status");
+
+if (speed > SHAKE_THRESHOLD) {
+	send();
+}
+last_x = x;
+last_y = y;
+last_z = z;
+}
+}
+
+var app = new Vue({
+	el:'#app',
+	data:{
+		no:[]
+	}
+});
+//===================socket============================
+    var websocket = null;
+
+    //判断当前浏览器是否支持WebSocket
+    if('WebSocket' in window){
+        websocket = new WebSocket("ws://changhaiwx.pagekite.me/websocket");
+    }
+    else{
+        alert('Not support websocket')
+    }
+
+    //连接发生错误的回调方法
+    websocket.onerror = function(){
+    };
+
+    //连接成功建立的回调方法
+    websocket.onopen = function(event){
+       
+    }
+
+    //接收到消息的回调方法
+    websocket.onmessage = function(event){
+    	var mes =event.data;
+    	app.no=mes.split(",");
+    	
+    }
+
+    //连接关闭的回调方法
+    websocket.onclose = function(){
+       
+    }
+
+    //监听窗口关闭事件，当窗口关闭时，主动去关闭websocket连接，防止连接还没断开就关闭窗口，server端会抛异常。
+    window.onbeforeunload = function(){
+        websocket.close();
+    }
+
+  
+    //关闭连接
+    function closeWebSocket(){
+        websocket.close();
+    }
+
+    //发送消息
+    function send(){
+        websocket.send("摇一摇");
+    }
+    String.prototype.startWith=function(str){     
+    	  var reg=new RegExp("^"+str);     
+    	  return reg.test(this);        
+    	}  
+</script>
+</body>
+
+</html>
